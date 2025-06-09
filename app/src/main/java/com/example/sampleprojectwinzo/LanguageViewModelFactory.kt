@@ -1,0 +1,19 @@
+package com.example.sampleprojectwinzo
+
+import android.app.Application
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+
+class LanguageViewModelFactory(
+    private val application: Application,
+    private val repository: Repository
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(LanguageViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return LanguageViewModel(application, repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
