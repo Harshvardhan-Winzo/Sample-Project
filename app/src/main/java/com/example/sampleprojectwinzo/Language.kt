@@ -1,11 +1,13 @@
 package com.example.sampleprojectwinzo
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.io.Serializable
+import kotlinx.parcelize.Parcelize
 
 
 @Entity
+@Parcelize
 data class Language(
     @PrimaryKey
     var languageId: String,
@@ -17,5 +19,5 @@ data class Language(
     var itemText: String,
 
     var buttonText: String
-) : java.io.Serializable
+) : Parcelable
 

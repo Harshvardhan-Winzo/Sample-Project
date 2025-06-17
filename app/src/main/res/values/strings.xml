@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">SampleProjectWinzo</string>
+    <string name="choose_your_language">Choose Your Language</string>
+    <string name="for_loading_language_icons">for loading language icons</string>
+    <string name="continuebuttontext">CONTINUE</string>
 </resources>

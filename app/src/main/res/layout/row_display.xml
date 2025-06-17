@@ -11,6 +11,7 @@
         android:id="@+id/languageicon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="@string/for_loading_language_icons"
         android:src="@mipmap/ic_launcher"
         android:layout_gravity="center_horizontal"/>
 

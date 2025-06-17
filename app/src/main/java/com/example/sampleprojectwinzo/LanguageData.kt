@@ -1,5 +1,8 @@
 package com.example.sampleprojectwinzo
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-data class LanguageData(var languageData: ArrayList<Language>):java.io.Serializable
+@Parcelize
+data class LanguageData(var languageData: ArrayList<Language>): Parcelable
 
 

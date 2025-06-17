@@ -1,38 +1,60 @@
 package com.example.sampleprojectwinzo
 
-import android.app.Application
+import android.content.Context
 import android.os.Looper
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LanguageViewModel(
-    application: Application,
     private val repository: Repository
-) : AndroidViewModel(application) {
+) : ViewModel() {
+
+    private var lastClickedLanguageId: String? = null
+    private var currentSelectedLanguage: Language? = null
 
     private val _languageList = MutableLiveData<List<Language>>()
     val languageList: LiveData<List<Language>> get() = _languageList
 
-    fun fetchLanguages() {
+    fun fetchLanguages(context: Context) {
         viewModelScope.launch {
-            Log.d(null,"in fetchLang")
-            val isMainThread = (Looper.getMainLooper() == Looper.myLooper())
-            if(isMainThread){
-                Log.d(null,"Yes its main thread")
-            }else{
-                Log.d(null,"Not main thread")
+            withContext(Dispatchers.IO) {
+                Log.d(null,"in fetchLang")
+                val isMainThread = (Looper.getMainLooper() == Looper.myLooper())
+                Log.d(null, if (isMainThread) "Yes it's main thread" else "Not main thread")
+                repository.fetchLanguagesFromApi(context.applicationContext)
+                val languages = repository.getAllLanguages()
+                _languageList.postValue(languages)
             }
-            val context = getApplication<Application>().applicationContext
-            repository.fetchLanguagesFromApi(context)
-
-            val languages = repository.getAllLanguages()
-            _languageList.postValue(languages) // value vs postValue
         }
+    }
+
+    fun getcurrentSelectedLanguage() : Language? {
+        return currentSelectedLanguage
+    }
+
+    fun setcurrentSelectedLanguage(language: Language?){
+         currentSelectedLanguage = language
+    }
+
+    fun writeToSP(fileName :String, languageId: String){
+        repository.writeToSharedPref(fileName,languageId)
+    }
+
+    fun setlastClickedLanguageId() {
+        viewModelScope.launch{
+            withContext(Dispatchers.IO){
+                lastClickedLanguageId = repository.getsharedPrefsFile().getString("clicked_language_id", null)
+            }
+        }
+    }
+
+    fun getlastClickedLanguageId(): String? {
+        return lastClickedLanguageId
     }
 }
